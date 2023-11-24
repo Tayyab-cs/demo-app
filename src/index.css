@@ -11,3 +11,6 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+h1:where(.css-dev-only-do-not-override-1g853jt).ant-typography, div:where(.css-dev-only-do-not-override-1g853jt).ant-typography-h1, div:where(.css-dev-only-do-not-override-1g853jt).ant-typography-h1>textarea, :where(.css-dev-only-do-not-override-1g853jt).ant-typography h1 {
+  margin-bottom: 0;
+}
