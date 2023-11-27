@@ -1,41 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { DeleteOutlined } from "@ant-design/icons";
 import { Flex, Button, Card, Alert, Typography, Space } from "antd";
 
 const { Text } = Typography;
 
-export default function ColorButtons(props) {
+export default function ColorButtons({ colors }) {
   const [bgColor, setBgColor] = useState("#fff");
   const [count, setCount] = useState(5);
-  const [alertMsg, setAlertMsg] = useState('');
-  const [alertType, setAlertType] = useState('');
+  const [alertMsg, setAlertMsg] = useState("");
+  const [alertType, setAlertType] = useState("");
   const [showAlert, setShowAlert] = useState(false);
-  const [mutateColors, setMutateColors] = useState([]);
-  const [displayColors, setDisplayColors] = useState([]);
+  const [mutateColors, setMutateColors] = useState(colors);
+  const [displayColors, setDisplayColors] = useState(colors.slice(0, count));
 
   // Saving original colors array to mutable colors array
-  useEffect(() => {
-    let colors = props.colors;
-    colors = colors.map((col, index) => ({
-      ...col,
-      id: col.name + index,
-      isDelete: false,
-    }));
-    setMutateColors(colors);
-    setDisplayColors(() => colors.slice(0, count));
-  }, []);
 
-  // Handling Count Increment and Decrement
   const countIncrement = () => {
-    if(count <= mutateColors.length) {
+    if (count <= mutateColors.length) {
       setCount(() => count + 1);
       setShowAlert(() => false);
       setDisplayColors(() =>
-      mutateColors.filter((col) => !col.isDelete).slice(0, count + 1)
+        mutateColors.filter((col) => !col.isDelete).slice(0, count + 1)
       );
     } else {
-      setAlertMsg('Colors Limit Reached');
-      setAlertType('warning');
+      setAlertMsg("Colors Limit Reached");
+      setAlertType("warning");
       setShowAlert(true);
     }
   };
@@ -59,8 +48,8 @@ export default function ColorButtons(props) {
   // Delete Button
   const handleDelete = (colorId) => {
     if (count === 5) {
-      setAlertMsg('You are not allowed to perform this action');
-      setAlertType('error');
+      setAlertMsg("You are not allowed to perform this action");
+      setAlertType("error");
       setShowAlert(() => true);
     } else if (count > 5) {
       const updatedColors = mutateColors.map((col) =>
