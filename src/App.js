@@ -1,6 +1,6 @@
 import "./App.css";
-import ColorButtons from "./components/ColorButtons.jsx";
-import { COLORS } from "./colors.js";
+// import ColorButtons from "./components/ColorButtons.jsx";
+// import { COLORS } from "./colors.js";
 
 function App() {
   // Random Color Picker
