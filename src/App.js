@@ -1,34 +1,30 @@
-import { useState } from "react";
 import "./App.css";
-import { Flex, Button } from "antd";
+import ColorButtons from "./components/ColorButtons.jsx";
 import { COLORS } from "./colors.js";
 
 function App() {
-  const [bgColor, setBgColor] = useState('#fff');
-
+  // Random Color Picker
   const getRandomColor = () => {
     const randomIndex = Math.floor(Math.random() * COLORS.length);
     const color = COLORS[randomIndex];
     return color.hex;
   };
 
-  return (
-  <div style={{ backgroundColor: bgColor, height: '100%', padding: '5px' }}>
-    <Flex gap="small" wrap="wrap">
-        <Button name="default" onClick={() => setBgColor('#fff')}>Default</Button>
-        <Button name="random" type="dashed" onClick={() => setBgColor(getRandomColor())}>Random</Button>
-        <Button name="green" onClick={() => setBgColor('#008000')}>Green</Button>
-        <Button name="blue" onClick={() => setBgColor('#0000FF')}>Blue</Button>
-        {
-          COLORS.map((color, index) => (
-            <Button name={color.name} key={color.name + index} onClick={() => setBgColor(color.hex)}>
-              {color.name}
-            </Button>
-          ))
-        }
-    </Flex>
-  </div>
-  )
+  // default and random colors array
+  const newColors = [
+    { name: "default", hex: "#ffffff" },
+    { name: "random", hex: getRandomColor },
+  ];
+
+  // checking newColors exists in COLORS array or not
+  newColors.forEach(newColor => {
+    const colorExists = COLORS.some(color => color.name === newColor.name);
+    if (!colorExists) {
+      COLORS.unshift(newColor);
+    }
+  });
+
+  return <ColorButtons colors={COLORS} />;
 }
 
 export default App;
