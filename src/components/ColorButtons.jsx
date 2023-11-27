@@ -1,56 +1,48 @@
 import React, { useState } from "react";
 import { DeleteOutlined } from "@ant-design/icons";
-import { Flex, Button, Card, Alert, Typography, Space } from "antd";
+import { Flex, Button, Card, Typography, Space, message, Divider } from "antd";
 
 const { Text } = Typography;
 
 export default function ColorButtons({ colors }) {
   const [bgColor, setBgColor] = useState("#fff");
   const [count, setCount] = useState(5);
-  const [alertMsg, setAlertMsg] = useState("");
-  const [alertType, setAlertType] = useState("");
-  const [showAlert, setShowAlert] = useState(false);
   const [mutateColors, setMutateColors] = useState(colors);
   const [displayColors, setDisplayColors] = useState(colors.slice(0, count));
+  const [messageApi, contextHolder] = message.useMessage();
 
-  // Saving original colors array to mutable colors array
+  // Notification
+  const openMessage = (type, message) => {
+    messageApi.open({
+      type,
+      content: message,
+    });
+  };
 
+  // Handling Count Increment and Decrement
   const countIncrement = () => {
     if (count <= mutateColors.length) {
       setCount(() => count + 1);
-      setShowAlert(() => false);
       setDisplayColors(() =>
         mutateColors.filter((col) => !col.isDelete).slice(0, count + 1)
       );
     } else {
-      setAlertMsg("Colors Limit Reached");
-      setAlertType("warning");
-      setShowAlert(true);
+      openMessage('warning', 'Colors Limit Reached 😒');
     }
   };
   const countDecrement = () => {
     if (count > 5) {
       setCount(() => count - 1);
-      setShowAlert(() => false);
       setDisplayColors(() =>
         mutateColors.filter((col) => !col.isDelete).slice(0, count - 1)
       );
-    } else if (count === 5) {
-      setShowAlert(() => true);
     }
-  };
-
-  // Handling Alert
-  const handleAlertClose = () => {
-    setShowAlert(() => false);
   };
 
   // Delete Button
   const handleDelete = (colorId) => {
     if (count === 5) {
-      setAlertMsg("You are not allowed to perform this action");
-      setAlertType("error");
-      setShowAlert(() => true);
+      openMessage('error', 'You are not allowed to perform this action 😢');
     } else if (count > 5) {
       const updatedColors = mutateColors.map((col) =>
         col.id === colorId ? { ...col, isDelete: true } : col
@@ -59,41 +51,31 @@ export default function ColorButtons({ colors }) {
       setDisplayColors(
         updatedColors.filter((col) => !col.isDelete).slice(0, count - 1)
       );
-      setShowAlert(false);
       setCount((preCount) => preCount - 1);
     }
   };
 
   return (
     <div style={{ backgroundColor: bgColor, height: "100vh", padding: "5px" }}>
+      {contextHolder}
       {/***** CARD *****/}
-      <Flex gap="large">
+      <Flex justify="center">
         <Card
           title="Counter"
           bordered={false}
           style={{ width: 300, textAlign: "center" }}
         >
           <Space>
-            <Button disabled={count === 5} onClick={() => countDecrement()}>
+            <Button disabled={count === 5} style={{ color: 'white', background: 'red', borderRadius: '20px' }} onClick={() => countDecrement()}>
               -
             </Button>
-            <Text>{count}</Text>
-            <Button onClick={() => countIncrement()}>+</Button>
+            <Text style={{ fontWeight: 'bold', fontSize: '20px'}}>{count}</Text>
+            <Button style={{ color: 'white', background: '#83E50D', borderRadius: '20px' }} onClick={() => countIncrement()}>+</Button>
           </Space>
         </Card>
-        <div>
-          {showAlert && (
-            <Alert
-              message={alertMsg}
-              type={alertType}
-              showIcon
-              closable
-              onClose={() => handleAlertClose()}
-            />
-          )}
-        </div>
       </Flex>
-      <hr />
+
+      <Divider />
 
       {/***** BUTTONS *****/}
       <Flex gap="small" wrap="wrap">
@@ -107,7 +89,6 @@ export default function ColorButtons({ colors }) {
               key={color.key}
               type="dashed"
               onClick={() => {
-                setShowAlert(false);
                 setBgColor(color.hex);
               }}
             >
@@ -119,7 +100,9 @@ export default function ColorButtons({ colors }) {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                color: "red",
+                color: "black",
+                background: 'red',
+                borderRadius: "20px",
               }}
               onClick={() => handleDelete(color.id)}
             >
