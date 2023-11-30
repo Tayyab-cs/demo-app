@@ -21,8 +21,13 @@ const DEFAULT_SELECTED_COLOR = {
   isDelete: false,
 };
 
-export default function ColorChanger({ colors, onSelectColor, selectedColor }) {
-  const [count, setCount] = useState(5);
+export default function ColorChanger({
+  colors,
+  defaultColorsList,
+  onSelectColor,
+  selectedColor,
+}) {
+  const [count, setCount] = useState(defaultColorsList.length);
   const [mutateColors, setMutateColors] = useState(colors);
   const [displayColors, setDisplayColors] = useState(colors.slice(0, count));
   const [messageApi, contextHolder] = message.useMessage();
@@ -37,8 +42,8 @@ export default function ColorChanger({ colors, onSelectColor, selectedColor }) {
 
   // Handling Count Increment and Decrement
   const countIncrement = () => {
-    if (count <= mutateColors.length) {
-      setCount(() => count + 1);
+    if (count === displayColors.length && count < mutateColors.length) {
+      setCount(count + 1);
       setDisplayColors(() =>
         mutateColors.filter((col) => !col.isDelete).slice(0, count + 1)
       );
@@ -55,15 +60,21 @@ export default function ColorChanger({ colors, onSelectColor, selectedColor }) {
     }
   };
 
+  console.log("mutateColors: ", mutateColors.length);
+  console.log("count: ", count);
+  console.log("displayColorsLength: ", displayColors.length);
+
   // Delete Button
   const handleDelete = (colorId) => {
     if (count === 5) {
       openMessage("error", "You are not allowed to perform this action 😢");
-    } else if (count > 5) {
+    } else if (count > 5 && displayColors.length > 5) {
       const updatedColors = mutateColors.map((col) =>
         col.id === colorId ? { ...col, isDelete: true } : col
       );
-      setMutateColors(updatedColors);
+      console.log('Updated Colors: ', updatedColors);
+      
+      setMutateColors(updatedColors.filter((col) => !col.isDelete));
       setDisplayColors(
         updatedColors.filter((col) => !col.isDelete).slice(0, count - 1)
       );
@@ -100,6 +111,7 @@ export default function ColorChanger({ colors, onSelectColor, selectedColor }) {
               {count}
             </Title>
             <Button
+              disabled={count === mutateColors.length && count === displayColors.length}
               style={{
                 color: "white",
                 background: "#83E50D",

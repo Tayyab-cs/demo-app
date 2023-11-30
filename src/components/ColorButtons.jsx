@@ -43,18 +43,21 @@ export default function ColorButtons() {
   }));
 
   return (
-    <Row gap="small">
-      <Col span={12}>
-        <ColorChanger
-          colors={colors}
-          selectedColor={selectedColor}
-          onSelectColor={setSelectedColor}
-        />
-      </Col>
-      <Space />
-      <Col span={12}>
-        <ColorBox selectedColor={selectedColor} />
-      </Col>
-    </Row>
+    <div style={{ height: '100vh'}}>
+      <Row gap="small">
+        <Col span={12}>
+          <ColorChanger
+            colors={colors}
+            defaultColorsList={colors.slice(0, 5)}
+            selectedColor={selectedColor}
+            onSelectColor={setSelectedColor}
+          />
+        </Col>
+        <Space />
+        <Col span={12}>
+          <ColorBox selectedColor={selectedColor} />
+        </Col>
+      </Row>
+    </div>
   );
 }

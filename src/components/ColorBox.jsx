@@ -4,8 +4,7 @@ import { Flex, Typography } from "antd";
 const { Title } = Typography;
 
 export default function ColorBox({ selectedColor }) {
-  let { name, hex, id } = selectedColor;
-  console.log("ColorBox: values(name, hex)", name, hex, id);
+  let { name, hex } = selectedColor;
 
   return (
     <Flex
