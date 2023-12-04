@@ -1,8 +1,8 @@
 import React, { useState } from "react";
+import { Space, Row, Col } from "antd";
+import { COLORS } from "../../colors";
 import ColorChanger from "./ColorChanger";
 import ColorBox from "./ColorBox";
-import { Space, Row, Col } from "antd";
-import { COLORS } from "../colors";
 
 const DEFAULT_SELECTED_COLOR = {
   name: "No Color Selected",
@@ -11,7 +11,7 @@ const DEFAULT_SELECTED_COLOR = {
   isDelete: false,
 };
 
-export default function ColorButtons() {
+export default function Index() {
   const [selectedColor, setSelectedColor] = useState(DEFAULT_SELECTED_COLOR);
 
   // Random Color Picker
@@ -43,7 +43,7 @@ export default function ColorButtons() {
   }));
 
   return (
-    <div style={{ height: '100vh'}}>
+    <div style={{ height: "100vh" }}>
       <Row gap="small">
         <Col span={12}>
           <ColorChanger

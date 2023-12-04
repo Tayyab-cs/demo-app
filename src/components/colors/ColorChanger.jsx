@@ -60,10 +60,6 @@ export default function ColorChanger({
     }
   };
 
-  console.log("mutateColors: ", mutateColors.length);
-  console.log("count: ", count);
-  console.log("displayColorsLength: ", displayColors.length);
-
   // Delete Button
   const handleDelete = (colorId) => {
     if (count === 5) {
@@ -72,8 +68,7 @@ export default function ColorChanger({
       const updatedColors = mutateColors.map((col) =>
         col.id === colorId ? { ...col, isDelete: true } : col
       );
-      console.log('Updated Colors: ', updatedColors);
-      
+
       setMutateColors(updatedColors.filter((col) => !col.isDelete));
       setDisplayColors(
         updatedColors.filter((col) => !col.isDelete).slice(0, count - 1)
@@ -111,7 +106,9 @@ export default function ColorChanger({
               {count}
             </Title>
             <Button
-              disabled={count === mutateColors.length && count === displayColors.length}
+              disabled={
+                count === mutateColors.length && count === displayColors.length
+              }
               style={{
                 color: "white",
                 background: "#83E50D",

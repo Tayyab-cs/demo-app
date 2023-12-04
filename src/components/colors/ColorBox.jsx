@@ -13,7 +13,9 @@ export default function ColorBox({ selectedColor }) {
       align="center"
       style={{ backgroundColor: hex, height: "100vh" }}
     >
-      <Title level={2} style={{ fontSize: "50px"}}>{name.toUpperCase()}</Title>
+      <Title level={2} style={{ fontSize: "50px" }}>
+        {name.toUpperCase()}
+      </Title>
     </Flex>
   );
 }

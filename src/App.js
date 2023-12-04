@@ -1,8 +1,14 @@
 import "./App.css";
-import ColorButtons from "./components/ColorButtons.jsx";
+// import Colors from "./components/colors/Index.jsx";
+import ColorsForm from "./components/colorsForm/Index.jsx";
 
 function App() {
-  return <ColorButtons />;
+  return (
+    <>
+      {/* <Colors /> */}
+      <ColorsForm />
+    </>
+  );
 }
 
 export default App;
