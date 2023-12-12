@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+
 import { DeleteOutlined } from "@ant-design/icons";
 import {
   Button,
@@ -11,9 +13,24 @@ import {
   Typography,
   message,
 } from "antd";
+import { FETCH_COLORS_URI } from "../../api/endPoints.js";
 
 const { Title } = Typography;
 
+const OLD_COLORS = [
+  {
+    _id: "123456789d0",
+    name: "default",
+    hex: "#ffffff",
+    isDelete: false,
+  },
+  {
+    _id: "987654321r0",
+    name: "random",
+    hex: () => "#" + Math.floor(Math.random() * 16777215).toString(16),
+    isDelete: false,
+  },
+];
 const DEFAULT_SELECTED_COLOR = {
   name: "No Color Selected",
   hex: "#fff",
@@ -21,16 +38,25 @@ const DEFAULT_SELECTED_COLOR = {
   isDelete: false,
 };
 
-export default function ColorChanger({
-  colors,
-  defaultColorsList,
-  onSelectColor,
-  selectedColor,
-}) {
-  const [count, setCount] = useState(defaultColorsList.length);
-  const [mutateColors, setMutateColors] = useState(colors);
-  const [displayColors, setDisplayColors] = useState(colors.slice(0, count));
+export default function ColorChanger({ color, setColor }) {
+  const [count, setCount] = useState(0);
+  const [displayColors, setDisplayColors] = useState([...OLD_COLORS]);
   const [messageApi, contextHolder] = message.useMessage();
+
+  // Fetch Colors
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(FETCH_COLORS_URI);
+        setDisplayColors([...OLD_COLORS, ...response.data.result.data]);
+        setCount(displayColors.length);
+      } catch (error) {
+        console.error("Error fetching colors: ", error);
+      }
+    };
+
+    fetchData();
+  }, [displayColors.length]);
 
   // Notification
   const openMessage = (type, message) => {
@@ -40,43 +66,16 @@ export default function ColorChanger({
     });
   };
 
-  // Handling Count Increment and Decrement
-  const countIncrement = () => {
-    if (count === displayColors.length && count < mutateColors.length) {
-      setCount(count + 1);
-      setDisplayColors(() =>
-        mutateColors.filter((col) => !col.isDelete).slice(0, count + 1)
-      );
-    } else {
-      openMessage("warning", "Colors Limit Reached 😒");
-    }
-  };
-  const countDecrement = () => {
-    if (count > 5) {
-      setCount(() => count - 1);
-      setDisplayColors(() =>
-        mutateColors.filter((col) => !col.isDelete).slice(0, count - 1)
-      );
-    }
-  };
-
   // Delete Button
   const handleDelete = (colorId) => {
     if (count === 5) {
       openMessage("error", "You are not allowed to perform this action 😢");
     } else if (count > 5 && displayColors.length > 5) {
-      const updatedColors = mutateColors.map((col) =>
-        col.id === colorId ? { ...col, isDelete: true } : col
-      );
-
-      setMutateColors(updatedColors.filter((col) => !col.isDelete));
-      setDisplayColors(
-        updatedColors.filter((col) => !col.isDelete).slice(0, count - 1)
-      );
+      setDisplayColors(color);
       setCount((preCount) => preCount - 1);
 
       // Updating Colors Screen State
-      if (colorId === selectedColor.id) onSelectColor(DEFAULT_SELECTED_COLOR);
+      if (colorId === color._id) setColor(DEFAULT_SELECTED_COLOR);
     }
   };
 
@@ -88,17 +87,17 @@ export default function ColorChanger({
         <Card
           title="Counter"
           bordered={false}
-          style={{ width: 300, textAlign: "center" }}
+          style={{ width: "300", textAlign: "center" }}
         >
           <Space>
             <Button
-              disabled={count === 5}
+              disabled={count === 0}
+              onClick={() => setCount(count - 1)}
               style={{
                 color: "white",
-                background: "red",
+                background: "#83E50D",
                 borderRadius: "20px",
               }}
-              onClick={() => countDecrement()}
             >
               -
             </Button>
@@ -106,15 +105,13 @@ export default function ColorChanger({
               {count}
             </Title>
             <Button
-              disabled={
-                count === mutateColors.length && count === displayColors.length
-              }
+              disabled={count === displayColors.length}
+              onClick={() => setCount(count + 1)}
               style={{
                 color: "white",
-                background: "#83E50D",
+                background: "red",
                 borderRadius: "20px",
               }}
-              onClick={() => countIncrement()}
             >
               +
             </Button>
@@ -125,25 +122,18 @@ export default function ColorChanger({
       <Divider />
 
       {/***** BUTTONS *****/}
-      <Flex style={{ margin: "50px" }} align="center" justify="center">
+      <Flex align="center" justify="center" style={{ margin: "50px" }}>
         <Row>
           {displayColors.map((color, index) => (
-            <Col key={color.id} span={8} style={{ padding: "5px" }}>
+            <Col key={color._id} span={8} style={{ padding: "5px" }}>
               <Flex>
                 <Button
                   name={color.name}
                   key={color.key}
                   type="dashed"
                   size="large"
-                  style={{
-                    width: "200px",
-                    background:
-                      color.name === "random" && selectedColor.name === "random"
-                        ? selectedColor.hex
-                        : color.hex,
-                  }}
                   onClick={() => {
-                    onSelectColor({
+                    setColor({
                       ...color,
                       hex:
                         typeof color.hex === "function"
@@ -151,11 +141,19 @@ export default function ColorChanger({
                           : color.hex,
                     });
                   }}
+                  style={{
+                    width: "200px",
+                    background:
+                      color.name === "random" && color.name === "random"
+                        ? color.hex
+                        : color.hex,
+                  }}
                 >
                   {color.name}
                 </Button>
                 <Flex align="center">
                   <Button
+                    onClick={() => handleDelete(color.id)}
                     style={{
                       width: "1px",
                       display: "flex",
@@ -165,7 +163,6 @@ export default function ColorChanger({
                       background: "red",
                       borderRadius: "20px",
                     }}
-                    onClick={() => handleDelete(color.id)}
                   >
                     <DeleteOutlined style={{ fontSize: "10px" }} />
                   </Button>

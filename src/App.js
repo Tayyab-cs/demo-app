@@ -1,13 +1,18 @@
 import "./App.css";
-// import Colors from "./components/colors/Index.jsx";
-import ColorsForm from "./components/colorsForm/Index.jsx";
+import { Routes, Route } from "react-router-dom";
+import NotFound from "./components/NotFound.jsx";
+import Colors from "./components/colors/ColorButtons.jsx";
+import ColorsForm from "./components/colorsForm/ColorsForm.jsx";
+import UserDetails from "./dashboard/UserDetails.jsx";
 
 function App() {
   return (
-    <>
-      {/* <Colors /> */}
-      <ColorsForm />
-    </>
+    <Routes>
+      <Route path="*" element={<NotFound />} />
+      <Route path="/color" element={<Colors />} />
+      <Route path="/create-color" element={<ColorsForm />} />
+      <Route path="/user-details" element={<UserDetails />} />
+    </Routes>
   );
 }
 

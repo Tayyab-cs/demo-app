@@ -1,5 +1,5 @@
 import RegisterColor from "./RegisterColor.jsx";
 
-export default function Index() {
+export default function ColorsForm() {
   return <RegisterColor />;
 }

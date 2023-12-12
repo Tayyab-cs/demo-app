@@ -3,8 +3,10 @@ import { Flex, Typography } from "antd";
 
 const { Title } = Typography;
 
-export default function ColorBox({ selectedColor }) {
-  let { name, hex } = selectedColor;
+export default function ColorBox({ color }) {
+  let { name, hex } = color;
+
+  console.log("name: ", color);
 
   return (
     <Flex
@@ -14,7 +16,7 @@ export default function ColorBox({ selectedColor }) {
       style={{ backgroundColor: hex, height: "100vh" }}
     >
       <Title level={2} style={{ fontSize: "50px" }}>
-        {name.toUpperCase()}
+        {name}
       </Title>
     </Flex>
   );
