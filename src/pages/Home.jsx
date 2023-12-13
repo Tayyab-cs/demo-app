@@ -5,6 +5,7 @@ import {
   HomeOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  NotificationOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, Button, theme } from "antd";
@@ -12,6 +13,7 @@ import Welcome from "./Welcome.jsx";
 import Colors from "../components/colors/ColorButtons.jsx";
 import ColorsForm from "../components/colorsForm/ColorsForm.jsx";
 import UserDetails from "../dashboard/UserDetails.jsx";
+import NotificationScreen from "./NotificationScreen.jsx";
 
 const { Header, Sider, Content } = Layout;
 
@@ -58,6 +60,11 @@ export default function Home() {
               icon: <CarOutlined />,
               label: "Car Registration",
             },
+            {
+              key: "notifications",
+              icon: <NotificationOutlined />,
+              label: "Notifications",
+            },
           ]}
         />
       </Sider>
@@ -92,6 +99,7 @@ export default function Home() {
           {selectedMenu === "colors" && <Colors />}
           {selectedMenu === "createColor" && <ColorsForm />}
           {selectedMenu === "userDetails" && <UserDetails />}
+          {selectedMenu === "notifications" && <NotificationScreen />}
         </Content>
       </Layout>
     </Layout>
