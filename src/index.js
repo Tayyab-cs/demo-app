@@ -6,15 +6,7 @@ import configureStore from "./store/store.js";
 import "./index.css";
 import App from "./App";
 
-const DEFAULT_COLOR = {
-  payload: {
-    id: "noId",
-    name: "No Color Selected",
-    hex: "#ffffff",
-    isDelete: null,
-  },
-};
-const store = configureStore(DEFAULT_COLOR);
+const store = configureStore();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

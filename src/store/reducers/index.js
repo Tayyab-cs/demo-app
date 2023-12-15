@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
-import colorReducer from "./colorReducer.js";
+import { activeColor, colors } from "./colorReducer.js";
 
 export default combineReducers({
-  colorReducer: colorReducer,
+  activeColor,
+  colors,
 });

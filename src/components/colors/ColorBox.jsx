@@ -5,9 +5,11 @@ import { useSelector } from "react-redux";
 const { Title } = Typography;
 
 export default function ColorBox() {
-  const state = useSelector((state) => state.payload);
-  let { name, hex } = state;
-  console.log("color box state: ", state);
+  const activeColor = useSelector((state) => state.activeColor);
+  let { name, hex } = activeColor.activeColor.payload;
+  console.log("color box state: ", activeColor.activeColor.payload);
+
+  console.log("getActiceColor", activeColor);
 
   return (
     <Flex

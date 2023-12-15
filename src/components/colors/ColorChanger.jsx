@@ -45,10 +45,12 @@ export default function ColorChanger() {
   const [count, setCount] = useState(0);
   const [displayColors, setDisplayColors] = useState([...OLD_COLORS]);
   const [messageApi, contextHolder] = message.useMessage();
-  const color = useSelector((state) => state.payload);
+  const color = useSelector((state) => state.activeColor);
+  const colorState = useSelector((state) => state.colors);
   const dispatch = useDispatch();
 
-  console.log("ColorState: ", color);
+  console.log("color: ", color);
+  console.log("colorState: ", colorState);
 
   // Fetch Colors
   useEffect(() => {
@@ -82,7 +84,6 @@ export default function ColorChanger() {
       setCount((preCount) => preCount - 1);
 
       // Updating Colors Screen State
-      // if (colorId === color._id) setColor(DEFAULT_SELECTED_COLOR);
       if (colorId === color._id)
         dispatch(activeColor({ DEFAULT_SELECTED_COLOR }));
     }
@@ -153,13 +154,6 @@ export default function ColorChanger() {
                         isDelete: color.isDelete,
                       })
                     );
-                    // setColor({
-                    //   ...color,
-                    //   hex:
-                    //     typeof color.hex === "function"
-                    //       ? color.hex()
-                    //       : color.hex,
-                    // });
                   }}
                   style={{
                     width: "200px",

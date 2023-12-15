@@ -1,6 +1,8 @@
 import * as actionType from "../actionTypes/actionTypes";
 
 export const activeColor = (activeColor) => {
+  console.log("action creator: ", activeColor);
+
   return {
     type: actionType.ACTIVE_COLOR,
     payload: activeColor,
