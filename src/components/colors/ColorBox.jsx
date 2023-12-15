@@ -1,12 +1,13 @@
 import React from "react";
 import { Flex, Typography } from "antd";
+import { useSelector } from "react-redux";
 
 const { Title } = Typography;
 
-export default function ColorBox({ color }) {
-  let { name, hex } = color;
-
-  console.log("name: ", color);
+export default function ColorBox() {
+  const state = useSelector((state) => state.payload);
+  let { name, hex } = state;
+  console.log("color box state: ", state);
 
   return (
     <Flex

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
+import { useSelector, useDispatch } from "react-redux";
 import { DeleteOutlined } from "@ant-design/icons";
 import {
   Button,
@@ -14,6 +14,7 @@ import {
   message,
 } from "antd";
 import { FETCH_COLORS_URI } from "../../api/endPoints.js";
+import { activeColor } from "../../store/actions/colorActions.js";
 
 const { Title } = Typography;
 
@@ -32,16 +33,22 @@ const OLD_COLORS = [
   },
 ];
 const DEFAULT_SELECTED_COLOR = {
-  name: "No Color Selected",
-  hex: "#fff",
-  id: "no color selected",
-  isDelete: false,
+  payload: {
+    name: "No Color Selected",
+    hex: "#fff",
+    id: "no color selected",
+    isDelete: false,
+  },
 };
 
-export default function ColorChanger({ color, setColor }) {
+export default function ColorChanger() {
   const [count, setCount] = useState(0);
   const [displayColors, setDisplayColors] = useState([...OLD_COLORS]);
   const [messageApi, contextHolder] = message.useMessage();
+  const color = useSelector((state) => state.payload);
+  const dispatch = useDispatch();
+
+  console.log("ColorState: ", color);
 
   // Fetch Colors
   useEffect(() => {
@@ -75,7 +82,9 @@ export default function ColorChanger({ color, setColor }) {
       setCount((preCount) => preCount - 1);
 
       // Updating Colors Screen State
-      if (colorId === color._id) setColor(DEFAULT_SELECTED_COLOR);
+      // if (colorId === color._id) setColor(DEFAULT_SELECTED_COLOR);
+      if (colorId === color._id)
+        dispatch(activeColor({ DEFAULT_SELECTED_COLOR }));
     }
   };
 
@@ -133,13 +142,24 @@ export default function ColorChanger({ color, setColor }) {
                   type="dashed"
                   size="large"
                   onClick={() => {
-                    setColor({
-                      ...color,
-                      hex:
-                        typeof color.hex === "function"
-                          ? color.hex()
-                          : color.hex,
-                    });
+                    dispatch(
+                      activeColor({
+                        id: color._id,
+                        name: color.name,
+                        hex:
+                          typeof color.hex === "function"
+                            ? color.hex()
+                            : color.hex,
+                        isDelete: color.isDelete,
+                      })
+                    );
+                    // setColor({
+                    //   ...color,
+                    //   hex:
+                    //     typeof color.hex === "function"
+                    //       ? color.hex()
+                    //       : color.hex,
+                    // });
                   }}
                   style={{
                     width: "200px",
