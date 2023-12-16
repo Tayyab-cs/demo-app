@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { DeleteOutlined } from "@ant-design/icons";
 import {
   Button,
@@ -33,24 +33,17 @@ const OLD_COLORS = [
   },
 ];
 const DEFAULT_SELECTED_COLOR = {
-  payload: {
-    name: "No Color Selected",
-    hex: "#fff",
-    id: "no color selected",
-    isDelete: false,
-  },
+  _id: "noId",
+  name: "no color selected",
+  hex: "#ffffff",
+  isDelete: false,
 };
 
 export default function ColorChanger() {
+  const [displayColors, setDisplayColors] = useState([]);
   const [count, setCount] = useState(0);
-  const [displayColors, setDisplayColors] = useState([...OLD_COLORS]);
   const [messageApi, contextHolder] = message.useMessage();
-  const color = useSelector((state) => state.activeColor);
-  const colorState = useSelector((state) => state.colors);
   const dispatch = useDispatch();
-
-  console.log("color: ", color);
-  console.log("colorState: ", colorState);
 
   // Fetch Colors
   useEffect(() => {
@@ -58,14 +51,13 @@ export default function ColorChanger() {
       try {
         const response = await axios.get(FETCH_COLORS_URI);
         setDisplayColors([...OLD_COLORS, ...response.data.result.data]);
-        setCount(displayColors.length);
       } catch (error) {
         console.error("Error fetching colors: ", error);
       }
     };
 
     fetchData();
-  }, [displayColors.length]);
+  }, []);
 
   // Notification
   const openMessage = (type, message) => {
@@ -77,20 +69,24 @@ export default function ColorChanger() {
 
   // Delete Button
   const handleDelete = (colorId) => {
-    if (count === 5) {
+    if (count > 0 && count <= displayColors.length) {
+      setDisplayColors((prevColors) =>
+        prevColors.map((color) => {
+          if (color._id === colorId) {
+            color.isDelete = true;
+          }
+          return color;
+        })
+      );
+      setCount((prevCount) => prevCount - 1);
+      dispatch(activeColor(DEFAULT_SELECTED_COLOR));
+    } else {
       openMessage("error", "You are not allowed to perform this action 😢");
-    } else if (count > 5 && displayColors.length > 5) {
-      setDisplayColors(color);
-      setCount((preCount) => preCount - 1);
-
-      // Updating Colors Screen State
-      if (colorId === color._id)
-        dispatch(activeColor({ DEFAULT_SELECTED_COLOR }));
     }
   };
 
   return (
-    <div style={{ height: "100vh", padding: "5px" }}>
+    <div style={{ padding: "5px" }}>
       {contextHolder}
       {/***** CARD *****/}
       <Flex justify="center">
@@ -115,7 +111,10 @@ export default function ColorChanger() {
               {count}
             </Title>
             <Button
-              disabled={count === displayColors.length}
+              disabled={
+                count ===
+                displayColors.filter((color) => !color.isDelete).length
+              }
               onClick={() => setCount(count + 1)}
               style={{
                 color: "white",
@@ -134,56 +133,59 @@ export default function ColorChanger() {
       {/***** BUTTONS *****/}
       <Flex align="center" justify="center" style={{ margin: "50px" }}>
         <Row>
-          {displayColors.map((color, index) => (
-            <Col key={color._id} span={8} style={{ padding: "5px" }}>
-              <Flex>
-                <Button
-                  name={color.name}
-                  key={color.key}
-                  type="dashed"
-                  size="large"
-                  onClick={() => {
-                    dispatch(
-                      activeColor({
-                        id: color._id,
-                        name: color.name,
-                        hex:
-                          typeof color.hex === "function"
-                            ? color.hex()
-                            : color.hex,
-                        isDelete: color.isDelete,
-                      })
-                    );
-                  }}
-                  style={{
-                    width: "200px",
-                    background:
-                      color.name === "random" && color.name === "random"
-                        ? color.hex
-                        : color.hex,
-                  }}
-                >
-                  {color.name}
-                </Button>
-                <Flex align="center">
+          {displayColors
+            .filter((colors) => !colors.isDelete)
+            .slice(0, count)
+            .map((color, index) => (
+              <Col key={color._id} span={8} style={{ padding: "5px" }}>
+                <Flex>
                   <Button
-                    onClick={() => handleDelete(color.id)}
+                    name={color.name}
+                    key={color.key}
+                    type="dashed"
+                    size="large"
+                    onClick={() => {
+                      dispatch(
+                        activeColor({
+                          id: color._id,
+                          name: color.name,
+                          hex:
+                            typeof color.hex === "function"
+                              ? color.hex()
+                              : color.hex,
+                          isDelete: color.isDelete,
+                        })
+                      );
+                    }}
                     style={{
-                      width: "1px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      color: "black",
-                      background: "red",
-                      borderRadius: "20px",
+                      width: "200px",
+                      background:
+                        color.name === "random" && color.name === "random"
+                          ? color.hex
+                          : color.hex,
                     }}
                   >
-                    <DeleteOutlined style={{ fontSize: "10px" }} />
+                    {color.name}
                   </Button>
+                  <Flex align="center">
+                    <Button
+                      onClick={() => handleDelete(color._id)}
+                      style={{
+                        width: "1px",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        color: "black",
+                        background: "red",
+                        borderRadius: "20px",
+                      }}
+                    >
+                      <DeleteOutlined style={{ fontSize: "10px" }} />
+                    </Button>
+                  </Flex>
                 </Flex>
-              </Flex>
-            </Col>
-          ))}
+              </Col>
+            ))}
         </Row>
       </Flex>
     </div>

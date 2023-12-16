@@ -5,7 +5,7 @@ import ColorBox from "./ColorBox.jsx";
 
 export default function ColorButtons() {
   return (
-    <div style={{ height: "100vh" }}>
+    <div>
       <Row gap="small">
         <Col span={12}>
           <ColorChanger />
