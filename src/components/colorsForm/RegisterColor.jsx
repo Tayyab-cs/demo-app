@@ -16,7 +16,6 @@ export default function RegisterColor() {
     let RESPONSE;
 
     try {
-      console.log("Form Values:", values);
       const validColor =
         values && validateColor(values.name) && validateColor(values.hex);
       if (!validColor) {
@@ -26,7 +25,6 @@ export default function RegisterColor() {
         });
       } else {
         RESPONSE = await axios.post(REGISTER_COLOR_URI, values);
-        console.log(RESPONSE.data);
         if (RESPONSE.status === 200 && RESPONSE.statusText === "OK") {
           setAlert({
             type: "success",

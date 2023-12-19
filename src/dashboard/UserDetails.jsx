@@ -16,7 +16,6 @@ export default function UserDetails() {
     const updatedDataSource = dataSource.filter(
       (item) => item.id !== record.id
     );
-    console.log("updatedDataSource: ", updatedDataSource);
     setDataSource(updatedDataSource);
   };
 
@@ -49,7 +48,6 @@ export default function UserDetails() {
         <Button
           type="link"
           onClick={() => {
-            console.log("record: ", record);
             setCarModalOpen(true);
             setViewData(record);
           }}

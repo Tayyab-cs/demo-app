@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useDispatch } from "react-redux";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { DeleteOutlined } from "@ant-design/icons";
 import {
   Button,
@@ -13,25 +12,14 @@ import {
   Typography,
   message,
 } from "antd";
-import { FETCH_COLORS_URI } from "../../api/endPoints.js";
-import { activeColor } from "../../store/actions/colorActions.js";
+import {
+  activeColorAction,
+  colorsListAction,
+  countAction,
+} from "../../store/actions/colorActions.js";
 
 const { Title } = Typography;
 
-const OLD_COLORS = [
-  {
-    _id: "123456789d0",
-    name: "default",
-    hex: "#ffffff",
-    isDelete: false,
-  },
-  {
-    _id: "987654321r0",
-    name: "random",
-    hex: () => "#" + Math.floor(Math.random() * 16777215).toString(16),
-    isDelete: false,
-  },
-];
 const DEFAULT_SELECTED_COLOR = {
   _id: "noId",
   name: "no color selected",
@@ -40,24 +28,10 @@ const DEFAULT_SELECTED_COLOR = {
 };
 
 export default function ColorChanger() {
-  const [displayColors, setDisplayColors] = useState([]);
-  const [count, setCount] = useState(0);
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
-
-  // Fetch Colors
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(FETCH_COLORS_URI);
-        setDisplayColors([...OLD_COLORS, ...response.data.result.data]);
-      } catch (error) {
-        console.error("Error fetching colors: ", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const colors = useSelector((state) => state.colors.colorsList);
+  const count = useSelector((state) => state.colors.count);
 
   // Notification
   const openMessage = (type, message) => {
@@ -69,20 +43,29 @@ export default function ColorChanger() {
 
   // Delete Button
   const handleDelete = (colorId) => {
-    if (count > 0 && count <= displayColors.length) {
-      setDisplayColors((prevColors) =>
-        prevColors.map((color) => {
-          if (color._id === colorId) {
-            color.isDelete = true;
-          }
-          return color;
-        })
-      );
-      setCount((prevCount) => prevCount - 1);
-      dispatch(activeColor(DEFAULT_SELECTED_COLOR));
+    if (count > 0 && count <= colors.length) {
+      const updatedColors = colors.map((color) => {
+        if (color._id === colorId) {
+          color.isDelete = true;
+        }
+        return color;
+      });
+      dispatch(colorsListAction(updatedColors));
+      // setCount((prevCount) => prevCount - 1);
+      dispatch(countAction(count - 1));
+      dispatch(activeColorAction(DEFAULT_SELECTED_COLOR));
     } else {
       openMessage("error", "You are not allowed to perform this action 😢");
     }
+  };
+
+  const countLength = () => {
+    const colorsList = colors;
+    if (colorsList && Array.isArray(colorsList)) {
+      const listLength = colorsList.filter((color) => !color.isDelete).length;
+      return count === listLength;
+    }
+    return false;
   };
 
   return (
@@ -98,7 +81,10 @@ export default function ColorChanger() {
           <Space>
             <Button
               disabled={count === 0}
-              onClick={() => setCount(count - 1)}
+              onClick={() => {
+                // setCount(count - 1);
+                dispatch(countAction(count - 1));
+              }}
               style={{
                 color: "white",
                 background: "#83E50D",
@@ -111,11 +97,11 @@ export default function ColorChanger() {
               {count}
             </Title>
             <Button
-              disabled={
-                count ===
-                displayColors.filter((color) => !color.isDelete).length
-              }
-              onClick={() => setCount(count + 1)}
+              disabled={countLength()}
+              onClick={() => {
+                // setCount(count + 1);
+                dispatch(countAction(count + 1));
+              }}
               style={{
                 color: "white",
                 background: "red",
@@ -133,59 +119,60 @@ export default function ColorChanger() {
       {/***** BUTTONS *****/}
       <Flex align="center" justify="center" style={{ margin: "50px" }}>
         <Row>
-          {displayColors
-            .filter((colors) => !colors.isDelete)
-            .slice(0, count)
-            .map((color, index) => (
-              <Col key={color._id} span={8} style={{ padding: "5px" }}>
-                <Flex>
-                  <Button
-                    name={color.name}
-                    key={color.key}
-                    type="dashed"
-                    size="large"
-                    onClick={() => {
-                      dispatch(
-                        activeColor({
-                          id: color._id,
-                          name: color.name,
-                          hex:
-                            typeof color.hex === "function"
-                              ? color.hex()
-                              : color.hex,
-                          isDelete: color.isDelete,
-                        })
-                      );
-                    }}
-                    style={{
-                      width: "200px",
-                      background:
-                        color.name === "random" && color.name === "random"
-                          ? color.hex
-                          : color.hex,
-                    }}
-                  >
-                    {color.name}
-                  </Button>
-                  <Flex align="center">
+          {colors &&
+            colors
+              .filter((colors) => !colors.isDelete)
+              .slice(0, count)
+              .map((color, index) => (
+                <Col key={color._id} span={8} style={{ padding: "5px" }}>
+                  <Flex>
                     <Button
-                      onClick={() => handleDelete(color._id)}
+                      name={color.name}
+                      key={color.key}
+                      type="dashed"
+                      size="large"
+                      onClick={() => {
+                        dispatch(
+                          activeColorAction({
+                            id: color._id,
+                            name: color.name,
+                            hex:
+                              typeof color.hex === "function"
+                                ? color.hex()
+                                : color.hex,
+                            isDelete: color.isDelete,
+                          })
+                        );
+                      }}
                       style={{
-                        width: "1px",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        color: "black",
-                        background: "red",
-                        borderRadius: "20px",
+                        width: "200px",
+                        background:
+                          color.name === "random" && color.name === "random"
+                            ? color.hex
+                            : color.hex,
                       }}
                     >
-                      <DeleteOutlined style={{ fontSize: "10px" }} />
+                      {color.name}
                     </Button>
+                    <Flex align="center">
+                      <Button
+                        onClick={() => handleDelete(color._id)}
+                        style={{
+                          width: "1px",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          color: "black",
+                          background: "red",
+                          borderRadius: "20px",
+                        }}
+                      >
+                        <DeleteOutlined style={{ fontSize: "10px" }} />
+                      </Button>
+                    </Flex>
                   </Flex>
-                </Flex>
-              </Col>
-            ))}
+                </Col>
+              ))}
         </Row>
       </Flex>
     </div>

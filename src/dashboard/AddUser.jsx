@@ -67,7 +67,6 @@ export default function AddUser({
 
       if (current === 0) {
         setUserInfo(form.getFieldsValue());
-        console.log("user info: ", userInfo);
       } else if (current === 1) {
         const carData = form.getFieldsValue();
         saveData(carData);
@@ -77,7 +76,6 @@ export default function AddUser({
       }
 
       setCurrent(current + 1);
-      console.log("current: ", current);
     } catch (error) {
       console.error("Validation Error: ", error);
     }
