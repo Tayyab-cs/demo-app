@@ -20,3 +20,10 @@ export const countAction = (count) => {
     payload: count,
   };
 };
+
+export const darkModeAction = (darkMode) => {
+  return {
+    type: actionType.DARK_MODE,
+    payload: darkMode,
+  };
+};

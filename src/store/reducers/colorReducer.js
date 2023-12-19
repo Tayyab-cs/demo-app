@@ -9,6 +9,7 @@ const initialState = {
   },
   colorsList: {},
   count: 0,
+  darkMode: false,
 };
 
 export function colors(state = initialState, action) {
@@ -29,6 +30,12 @@ export function colors(state = initialState, action) {
       return {
         ...state,
         count: action.payload,
+      };
+
+    case actionType.DARK_MODE:
+      return {
+        ...state,
+        darkMode: action.payload,
       };
 
     default:

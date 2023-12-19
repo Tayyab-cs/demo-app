@@ -1,6 +1,6 @@
 import React from "react";
-import { Flex, Typography } from "antd";
 import { useSelector } from "react-redux";
+import { Flex, Typography } from "antd";
 
 const { Title } = Typography;
 

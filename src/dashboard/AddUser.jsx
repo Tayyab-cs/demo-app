@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { Form, Modal, Button, message, Steps, theme } from "antd";
+import { v4 as uuidv4 } from "uuid";
 import UserInfo from "./UserInfo.jsx";
 import CarDetails from "./CarDetails.jsx";
 import ResultComponent from "./ResultComponent.jsx";

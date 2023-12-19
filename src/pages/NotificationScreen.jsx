@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import io from "socket.io-client";
 import { Alert, Typography } from "antd";
+import io from "socket.io-client";
 
 const { Title } = Typography;
 

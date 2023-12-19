@@ -1,14 +1,18 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Alert, Button, Form, Input, Typography } from "antd";
 import axios from "axios";
 import validateColor from "validate-color";
-import { Alert, Button, Form, Input, Typography } from "antd";
 import { REGISTER_COLOR_URI } from "../../api/endPoints.js";
+import { colorsListAction } from "../../store/actions/colorActions.js";
 
 const { Title } = Typography;
 
 export default function RegisterColor() {
   const [form] = Form.useForm();
   const [alert, setAlert] = useState(null);
+  const colorsList = useSelector((state) => state.colors.colorsList);
+  const dispatch = useDispatch();
 
   // Handling form submittion
   const onFinish = async (values) => {
@@ -30,6 +34,12 @@ export default function RegisterColor() {
             type: "success",
             message: RESPONSE.data.message,
           });
+          dispatch(
+            colorsListAction([
+              ...colorsList,
+              { name: values.name, hex: values.hex },
+            ])
+          );
         }
         form.resetFields();
       }

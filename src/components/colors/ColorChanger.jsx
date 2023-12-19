@@ -30,6 +30,7 @@ const DEFAULT_SELECTED_COLOR = {
 export default function ColorChanger() {
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
+  const activeColor = useSelector((state) => state.colors.activeColor);
   const colors = useSelector((state) => state.colors.colorsList);
   const count = useSelector((state) => state.colors.count);
 
@@ -42,18 +43,19 @@ export default function ColorChanger() {
   };
 
   // Delete Button
-  const handleDelete = (colorId) => {
+  const handleDelete = (colorName) => {
     if (count > 0 && count <= colors.length) {
       const updatedColors = colors.map((color) => {
-        if (color._id === colorId) {
+        if (color.name === colorName) {
           color.isDelete = true;
         }
         return color;
       });
       dispatch(colorsListAction(updatedColors));
-      // setCount((prevCount) => prevCount - 1);
       dispatch(countAction(count - 1));
-      dispatch(activeColorAction(DEFAULT_SELECTED_COLOR));
+      if (activeColor.name === colorName) {
+        dispatch(activeColorAction(DEFAULT_SELECTED_COLOR));
+      }
     } else {
       openMessage("error", "You are not allowed to perform this action 😢");
     }
@@ -82,7 +84,6 @@ export default function ColorChanger() {
             <Button
               disabled={count === 0}
               onClick={() => {
-                // setCount(count - 1);
                 dispatch(countAction(count - 1));
               }}
               style={{
@@ -99,7 +100,6 @@ export default function ColorChanger() {
             <Button
               disabled={countLength()}
               onClick={() => {
-                // setCount(count + 1);
                 dispatch(countAction(count + 1));
               }}
               style={{
@@ -124,7 +124,11 @@ export default function ColorChanger() {
               .filter((colors) => !colors.isDelete)
               .slice(0, count)
               .map((color, index) => (
-                <Col key={color._id} span={8} style={{ padding: "5px" }}>
+                <Col
+                  key={color.hex + index}
+                  span={8}
+                  style={{ padding: "5px" }}
+                >
                   <Flex>
                     <Button
                       name={color.name}
@@ -156,7 +160,7 @@ export default function ColorChanger() {
                     </Button>
                     <Flex align="center">
                       <Button
-                        onClick={() => handleDelete(color._id)}
+                        onClick={() => handleDelete(color.name)}
                         style={{
                           width: "1px",
                           display: "flex",

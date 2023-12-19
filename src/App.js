@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Routes, Route } from "react-router-dom";
+import { ConfigProvider, theme } from "antd";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import "./App.css";
 import { FETCH_COLORS_URI } from "../src/api/endPoints.js";
@@ -29,6 +31,7 @@ const OLD_COLORS = [
 function App() {
   const dispatch = useDispatch();
 
+  // API call
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -43,14 +46,24 @@ function App() {
     fetchData();
   }, [dispatch]);
 
+  let darkMode = useSelector((state) => state.colors.darkMode);
+
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/color" element={<Colors />} />
-      <Route path="/create-color" element={<ColorsForm />} />
-      <Route path="/user-details" element={<UserDetails />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    <>
+      <ConfigProvider
+        theme={{
+          algorithm: darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
+        }}
+      >
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/color" element={<Colors />} />
+          <Route path="/create-color" element={<ColorsForm />} />
+          <Route path="/user-details" element={<UserDetails />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </ConfigProvider>
+    </>
   );
 }
 
