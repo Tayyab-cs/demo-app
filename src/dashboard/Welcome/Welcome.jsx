@@ -1,10 +1,11 @@
 import React from "react";
 import { Flex, Image, Typography } from "antd";
-import welcome from "../../src/assets/gifs/hello.gif";
+import welcome from "../../assets/gifs/hello.gif";
+import { Outlet } from "react-router-dom";
 
 const { Title } = Typography;
 
-export default function Welcome() {
+export const Welcome = () => {
   return (
     <Flex justify="center" align="center" vertical>
       <Title level={1}>WELCOME TO APPFORPRACTICE</Title>
@@ -13,6 +14,7 @@ export default function Welcome() {
         alt="Your GIF"
         style={{ margin: "10px", width: "400px" }}
       />
+      <Outlet />
     </Flex>
   );
-}
+};

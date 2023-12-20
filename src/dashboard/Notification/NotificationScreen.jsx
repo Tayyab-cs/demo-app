@@ -4,7 +4,7 @@ import io from "socket.io-client";
 
 const { Title } = Typography;
 
-const NotificationScreen = () => {
+export const NotificationScreen = () => {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
@@ -34,5 +34,3 @@ const NotificationScreen = () => {
     </div>
   );
 };
-
-export default NotificationScreen;

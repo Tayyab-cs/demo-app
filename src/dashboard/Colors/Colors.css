@@ -1,0 +1,39 @@
+.card-container {
+  width: 300; 
+  text-align: center 
+}
+
+.card-title.ant-typography {
+  font-weight: bold; 
+  font-size: 20px
+}
+
+.decrement-btn {
+  color: white;
+  background: #83E50D;
+  border-radius: 20px
+}
+
+.increment-btn {
+  color: white;
+  background: red;
+  border-radius: 20px
+}
+
+.delete-color-btn {
+  width: 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  background: red;
+  border-radius: 20px;
+}
+
+.flex-btns {
+  margin: 50px 
+}
+
+DeleteOutlined {
+  font-size: 10px
+}

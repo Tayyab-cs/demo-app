@@ -4,7 +4,7 @@ import { Flex, Typography } from "antd";
 
 const { Title } = Typography;
 
-export default function ColorBox() {
+export const ColorBox = () => {
   const colors = useSelector((state) => state.colors.activeColor);
   let { name, hex } = colors;
 
@@ -20,4 +20,4 @@ export default function ColorBox() {
       </Title>
     </Flex>
   );
-}
+};

@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { Form, Modal, Button, message, Steps, theme } from "antd";
 import { v4 as uuidv4 } from "uuid";
-import UserInfo from "./UserInfo.jsx";
-import CarDetails from "./CarDetails.jsx";
-import ResultComponent from "./ResultComponent.jsx";
+import { UserInfo } from "./UserInfo.jsx";
+import { CarDetails } from "./CarDetails.jsx";
+import { ResultComponent } from "./ResultComponent.jsx";
 
-export default function AddUser({
+export const AddUser = ({
   isModalOpen,
   setIsModalOpen,
   dataSource,
   setDataSource,
-}) {
+}) => {
   const { token } = theme.useToken();
   const [form] = Form.useForm();
   const [current, setCurrent] = useState(0);
@@ -131,4 +131,4 @@ export default function AddUser({
       </div>
     </Modal>
   );
-}
+};

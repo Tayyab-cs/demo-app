@@ -17,6 +17,7 @@ import {
   colorsListAction,
   countAction,
 } from "../../store/actions/colorActions.js";
+import "./Colors.css";
 
 const { Title } = Typography;
 
@@ -27,7 +28,7 @@ const DEFAULT_SELECTED_COLOR = {
   isDelete: false,
 };
 
-export default function ColorChanger() {
+export const ColorChanger = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
   const activeColor = useSelector((state) => state.colors.activeColor);
@@ -75,37 +76,23 @@ export default function ColorChanger() {
       {contextHolder}
       {/***** CARD *****/}
       <Flex justify="center">
-        <Card
-          title="Counter"
-          bordered={false}
-          style={{ width: "300", textAlign: "center" }}
-        >
+        <Card className="card-container" title="Counter" bordered={false}>
           <Space>
             <Button
+              className="decrement-btn"
               disabled={count === 0}
               onClick={() => {
                 dispatch(countAction(count - 1));
               }}
-              style={{
-                color: "white",
-                background: "#83E50D",
-                borderRadius: "20px",
-              }}
             >
               -
             </Button>
-            <Title style={{ fontWeight: "bold", fontSize: "20px" }}>
-              {count}
-            </Title>
+            <Title className="card-title">{count}</Title>
             <Button
+              className="increment-btn"
               disabled={countLength()}
               onClick={() => {
                 dispatch(countAction(count + 1));
-              }}
-              style={{
-                color: "white",
-                background: "red",
-                borderRadius: "20px",
               }}
             >
               +
@@ -117,7 +104,7 @@ export default function ColorChanger() {
       <Divider />
 
       {/***** BUTTONS *****/}
-      <Flex align="center" justify="center" style={{ margin: "50px" }}>
+      <Flex className="flex-btns" align="center" justify="center">
         <Row>
           {colors &&
             colors
@@ -160,18 +147,10 @@ export default function ColorChanger() {
                     </Button>
                     <Flex align="center">
                       <Button
+                        className="delete-color-btn"
                         onClick={() => handleDelete(color.name)}
-                        style={{
-                          width: "1px",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          color: "black",
-                          background: "red",
-                          borderRadius: "20px",
-                        }}
                       >
-                        <DeleteOutlined style={{ fontSize: "10px" }} />
+                        <DeleteOutlined />
                       </Button>
                     </Flex>
                   </Flex>
@@ -181,4 +160,4 @@ export default function ColorChanger() {
       </Flex>
     </div>
   );
-}
+};

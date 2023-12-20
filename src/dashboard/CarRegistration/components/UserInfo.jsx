@@ -1,7 +1,7 @@
 import React from "react";
 import { Flex, Form, Input } from "antd";
 
-export default function UserInfo({ form }) {
+export const UserInfo = ({ form }) => {
   return (
     <Flex justify="center">
       <Form form={form} layout="vertical" style={{ marginTop: "15px" }}>
@@ -25,4 +25,4 @@ export default function UserInfo({ form }) {
       </Form>
     </Flex>
   );
-}
+};

@@ -1,9 +1,9 @@
 import React from "react";
 import { Space, Row, Col } from "antd";
-import ColorChanger from "./ColorChanger.jsx";
-import ColorBox from "./ColorBox.jsx";
+import { ColorChanger } from "./ColorChanger.jsx";
+import { ColorBox } from "./ColorBox.jsx";
 
-export default function ColorButtons() {
+export const ColorButtons = () => {
   return (
     <div>
       <Row gap="small">
@@ -17,4 +17,4 @@ export default function ColorButtons() {
       </Row>
     </div>
   );
-}
+};

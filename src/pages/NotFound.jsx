@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Result } from "antd";
 
-export default function NotFound() {
+export const NotFound = () => {
   return (
     <Result
       status="404"
@@ -10,4 +10,4 @@ export default function NotFound() {
       extra={<Button type="primary">Back Home</Button>}
     />
   );
-}
+};

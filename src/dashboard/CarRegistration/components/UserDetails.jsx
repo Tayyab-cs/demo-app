@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Button, Flex, Table, Typography } from "antd";
-import AddUser from "./AddUser.jsx";
-import CarModal from "./CarModal.jsx";
+import { AddUser } from "./AddUser.jsx";
+import { CarModal } from "./CarModal.jsx";
 
 const { Title } = Typography;
 
-export default function UserDetails() {
+export const UserDetails = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [carModalOpen, setCarModalOpen] = useState(false);
   const [viewData, setViewData] = useState({});
@@ -99,4 +99,4 @@ export default function UserDetails() {
       )}
     </div>
   );
-}
+};

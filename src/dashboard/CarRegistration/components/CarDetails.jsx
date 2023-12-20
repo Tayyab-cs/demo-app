@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Card, Flex, Form, Input } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 
-export default function CarDetails({ form }) {
+export const CarDetails = ({ form }) => {
   return (
     <>
       <Form
@@ -91,4 +91,4 @@ export default function CarDetails({ form }) {
       </Form>
     </>
   );
-}
+};

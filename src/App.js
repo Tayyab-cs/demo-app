@@ -1,17 +1,24 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Routes, Route } from "react-router-dom";
-import { ConfigProvider, theme } from "antd";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { ConfigProvider, theme } from "antd";
 import axios from "axios";
 import "./App.css";
 import { FETCH_COLORS_URI } from "../src/api/endPoints.js";
 import { colorsListAction } from "../src/store/actions/colorActions.js";
-import NotFound from "./components/NotFound.jsx";
-import Colors from "./components/colors/ColorButtons.jsx";
-import ColorsForm from "./components/colorsForm/ColorsForm.jsx";
-import UserDetails from "./dashboard/UserDetails.jsx";
-import Home from "./pages/Home.jsx";
+import { Home, NotFound } from "./pages/index.pages.js";
+import {
+  ColorButtons,
+  ColorsForm,
+  UserDetails,
+  NotificationScreen,
+  Welcome,
+} from "./dashboard/index.dashboard.js";
+import { PersistGate } from "redux-persist/integration/react";
+import configureStore from "../src/store/store.js";
+
+const { persistor } = configureStore();
 
 const OLD_COLORS = [
   {
@@ -50,19 +57,26 @@ function App() {
 
   return (
     <>
-      <ConfigProvider
-        theme={{
-          algorithm: darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
-        }}
-      >
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/color" element={<Colors />} />
-          <Route path="/create-color" element={<ColorsForm />} />
-          <Route path="/user-details" element={<UserDetails />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </ConfigProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <ConfigProvider
+          theme={{
+            algorithm: darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
+          }}
+        >
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Home />}>
+                <Route path="/" element={<Welcome />} />
+                <Route path="/color" element={<ColorButtons />} />
+                <Route path="/create-color" element={<ColorsForm />} />
+                <Route path="/user-details" element={<UserDetails />} />
+                <Route path="/notifications" element={<NotificationScreen />} />
+              </Route>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </ConfigProvider>
+      </PersistGate>
     </>
   );
 }

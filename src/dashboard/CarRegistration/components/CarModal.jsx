@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Modal } from "antd";
 
-export default function CarModal({ carModalOpen, setCarModalOpen, viewData }) {
+export const CarModal = ({ carModalOpen, setCarModalOpen, viewData }) => {
   const carsData = viewData.carDetail.items;
 
   return (
@@ -31,4 +31,4 @@ export default function CarModal({ carModalOpen, setCarModalOpen, viewData }) {
       })}
     </Modal>
   );
-}
+};

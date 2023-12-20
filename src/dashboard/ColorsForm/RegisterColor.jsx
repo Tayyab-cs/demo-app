@@ -8,7 +8,7 @@ import { colorsListAction } from "../../store/actions/colorActions.js";
 
 const { Title } = Typography;
 
-export default function RegisterColor() {
+export const RegisterColor = () => {
   const [form] = Form.useForm();
   const [alert, setAlert] = useState(null);
   const colorsList = useSelector((state) => state.colors.colorsList);
@@ -124,4 +124,4 @@ export default function RegisterColor() {
       </Form>
     </>
   );
-}
+};
