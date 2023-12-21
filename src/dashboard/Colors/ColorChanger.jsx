@@ -13,10 +13,10 @@ import {
   message,
 } from "antd";
 import {
-  activeColorAction,
-  colorsListAction,
-  countAction,
-} from "../../store/actions/colorActions.js";
+  setActiveColor,
+  setColorsList,
+  setCount,
+} from "../../store/slices/colorSlice.js";
 import "./Colors.css";
 
 const { Title } = Typography;
@@ -52,10 +52,10 @@ export const ColorChanger = () => {
         }
         return color;
       });
-      dispatch(colorsListAction(updatedColors));
-      dispatch(countAction(count - 1));
+      dispatch(setColorsList(updatedColors));
+      dispatch(setCount(count - 1));
       if (activeColor.name === colorName) {
-        dispatch(activeColorAction(DEFAULT_SELECTED_COLOR));
+        dispatch(setActiveColor(DEFAULT_SELECTED_COLOR));
       }
     } else {
       openMessage("error", "You are not allowed to perform this action 😢");
@@ -82,7 +82,7 @@ export const ColorChanger = () => {
               className="decrement-btn"
               disabled={count === 0}
               onClick={() => {
-                dispatch(countAction(count - 1));
+                dispatch(setCount(count - 1));
               }}
             >
               -
@@ -92,7 +92,7 @@ export const ColorChanger = () => {
               className="increment-btn"
               disabled={countLength()}
               onClick={() => {
-                dispatch(countAction(count + 1));
+                dispatch(setCount(count + 1));
               }}
             >
               +
@@ -124,7 +124,7 @@ export const ColorChanger = () => {
                       size="large"
                       onClick={() => {
                         dispatch(
-                          activeColorAction({
+                          setActiveColor({
                             id: color._id,
                             name: color.name,
                             hex:

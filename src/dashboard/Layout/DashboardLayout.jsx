@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { MdDarkMode, MdLightMode } from "react-icons/md";
 import {
   BgColorsOutlined,
@@ -12,26 +12,28 @@ import {
   PlusCircleOutlined,
 } from "@ant-design/icons";
 import { Radio } from "antd";
-import { Layout, Menu, Button, theme, ConfigProvider, Switch } from "antd";
+import { Layout, Menu, Button, theme, Switch } from "antd";
+
+import "./DashboardLayout.css";
+import {
+  fetchColors,
+  setDarkMode,
+  setLocale,
+} from "../../store/slices/colorSlice.js";
+
 import urPK from "antd/locale/ur_PK";
 import enUS from "antd/locale/en_US";
 import dayjs from "dayjs";
-import "../../node_modules/dayjs/locale/ur";
-import { darkModeAction } from "../store/actions/colorActions.js";
-import "./Home.css";
-
 dayjs.locale("en");
-
 const { Header, Sider, Content } = Layout;
 
-export const Home = () => {
+export const DashboardLayout = () => {
+  let location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
-  const [selectedMenu, setSelectedMenu] = useState("/");
-  const [locale, setLocal] = useState(enUS);
+  const [selectedMenu, setSelectedMenu] = useState(location.pathname);
   const dispatch = useDispatch();
-  const darkMode = useSelector((state) => state.colors.darkMode);
+  const { darkMode, locale } = useSelector((state) => state.colors);
   const navigate = useNavigate();
-
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -43,7 +45,7 @@ export const Home = () => {
 
   const changeLocale = (e) => {
     const localeValue = e.target.value;
-    setLocal(localeValue);
+    dispatch(setLocale(localeValue));
     if (!localeValue) {
       dayjs.locale("en");
     } else {
@@ -52,8 +54,13 @@ export const Home = () => {
   };
 
   const toggleTheme = () => {
-    dispatch(darkModeAction(!darkMode));
+    dispatch(setDarkMode(!darkMode));
   };
+
+  // API call
+  useEffect(() => {
+    dispatch(fetchColors());
+  }, [dispatch]);
 
   return (
     <Layout style={{ height: "100vh" }}>
@@ -123,17 +130,15 @@ export const Home = () => {
             onChange={toggleTheme}
           />
         </Header>
-        <ConfigProvider locale={locale}>
-          <Content
-            className="page-content"
-            style={{
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-            }}
-          >
-            <Outlet />
-          </Content>
-        </ConfigProvider>
+        <Content
+          className="page-content"
+          style={{
+            background: colorBgContainer,
+            borderRadius: borderRadiusLG,
+          }}
+        >
+          <Outlet />
+        </Content>
       </Layout>
     </Layout>
   );

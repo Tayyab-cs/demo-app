@@ -4,7 +4,7 @@ import { Alert, Button, Form, Input, Typography } from "antd";
 import axios from "axios";
 import validateColor from "validate-color";
 import { REGISTER_COLOR_URI } from "../../api/endPoints.js";
-import { colorsListAction } from "../../store/actions/colorActions.js";
+import { setColorsList } from "../../store/slices/colorSlice.js";
 
 const { Title } = Typography;
 
@@ -35,7 +35,7 @@ export const RegisterColor = () => {
             message: RESPONSE.data.message,
           });
           dispatch(
-            colorsListAction([
+            setColorsList([
               ...colorsList,
               { name: values.name, hex: values.hex },
             ])

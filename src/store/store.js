@@ -1,7 +1,7 @@
-import { createStore } from "redux";
+import { configureStore } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import rootReducer from "./reducers/index.js";
+import rootReducer from "./slices/index.slices.js";
 
 const persistConfig = {
   key: "root",
@@ -10,12 +10,14 @@ const persistConfig = {
 
 const persistReducers = persistReducer(persistConfig, rootReducer);
 
-export default function configureStore() {
-  let store = createStore(
-    persistReducers,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-  );
-  let persistor = persistStore(store);
+const store = configureStore({
+  reducer: persistReducers,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
+});
 
-  return { store, persistor };
-}
+const persistor = persistStore(store);
+
+export { store, persistor };
