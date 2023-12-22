@@ -4,7 +4,6 @@ import {
   DashboardLayout,
   Welcome,
   ColorButtons,
-  ColorsForm,
   UserDetails,
   NotificationScreen,
 } from "../dashboard";
@@ -17,7 +16,6 @@ export default function RouterConfig() {
         <Route path="/" element={<DashboardLayout />}>
           <Route path="/" element={<Welcome />} />
           <Route path="/color" element={<ColorButtons />} />
-          <Route path="/create-color" element={<ColorsForm />} />
           <Route path="/user-details" element={<UserDetails />} />
           <Route path="/notifications" element={<NotificationScreen />} />
         </Route>

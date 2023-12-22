@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Alert, Button, Form, Input, Typography } from "antd";
-import axios from "axios";
+import { Alert, Button, Form, Input } from "antd";
 import validateColor from "validate-color";
-import { REGISTER_COLOR_URI } from "../../api/endPoints.js";
 import { setColorsList } from "../../store/slices/colorSlice.js";
-
-const { Title } = Typography;
+import axiosInstance from "../../api/AxiosConfig.js";
 
 export const RegisterColor = () => {
   const [form] = Form.useForm();
@@ -28,7 +25,7 @@ export const RegisterColor = () => {
           message: "Invalid color name or hex code",
         });
       } else {
-        RESPONSE = await axios.post(REGISTER_COLOR_URI, values);
+        RESPONSE = await axiosInstance.post("/register-color", values);
         if (RESPONSE.status === 200 && RESPONSE.statusText === "OK") {
           setAlert({
             type: "success",
@@ -84,7 +81,6 @@ export const RegisterColor = () => {
         onFinish={onFinish}
         autoComplete="off"
       >
-        <Title>COLORS</Title>
         <Form.Item
           label="Name"
           name="name"

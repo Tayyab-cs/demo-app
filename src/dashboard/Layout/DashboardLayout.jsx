@@ -13,18 +13,17 @@ import {
 } from "@ant-design/icons";
 import { Radio } from "antd";
 import { Layout, Menu, Button, theme, Switch } from "antd";
-
-import "./DashboardLayout.css";
+import urPK from "antd/locale/ur_PK";
+import enUS from "antd/locale/en_US";
+import dayjs from "dayjs";
 import {
   fetchColors,
   setDarkMode,
   setLocale,
 } from "../../store/slices/colorSlice.js";
-
-import urPK from "antd/locale/ur_PK";
-import enUS from "antd/locale/en_US";
-import dayjs from "dayjs";
+import "./DashboardLayout.css";
 dayjs.locale("en");
+
 const { Header, Sider, Content } = Layout;
 
 export const DashboardLayout = () => {

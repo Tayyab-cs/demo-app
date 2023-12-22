@@ -1,7 +1,6 @@
-import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { FETCH_COLORS_URI } from "../../api/endPoints.js";
 import enUS from "antd/locale/en_US";
+import axiosInstance from "../../api/AxiosConfig.js";
 
 const OLD_COLORS = [
   {
@@ -19,7 +18,7 @@ const OLD_COLORS = [
 ];
 
 export const fetchColors = createAsyncThunk("colors/fetchColors", async () => {
-  const response = await axios.get(FETCH_COLORS_URI);
+  const response = await axiosInstance.get("/fetch-colors");
   return response.data.result.data;
 });
 
@@ -42,6 +41,9 @@ export const colorSlice = createSlice({
   reducers: {
     setActiveColor: (state, action) => {
       state.activeColor = action.payload;
+    },
+    setColorsList: (state, action) => {
+      state.colorsList = action.payload;
     },
     setCount: (state, action) => {
       state.count = action.payload;

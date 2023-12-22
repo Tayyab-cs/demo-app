@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   Button,
   Card,
   Col,
   Divider,
   Flex,
+  Modal,
   Row,
   Space,
   Typography,
@@ -18,6 +19,7 @@ import {
   setCount,
 } from "../../store/slices/colorSlice.js";
 import "./Colors.css";
+import { RegisterColor } from "./RegisterColor.jsx";
 
 const { Title } = Typography;
 
@@ -29,6 +31,7 @@ const DEFAULT_SELECTED_COLOR = {
 };
 
 export const ColorChanger = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
   const activeColor = useSelector((state) => state.colors.activeColor);
@@ -71,11 +74,22 @@ export const ColorChanger = () => {
     return false;
   };
 
+  // Modal Methods
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div style={{ padding: "5px" }}>
       {contextHolder}
       {/***** CARD *****/}
-      <Flex justify="center">
+      <Flex justify="space-between">
         <Card className="card-container" title="Counter" bordered={false}>
           <Space>
             <Button
@@ -99,6 +113,20 @@ export const ColorChanger = () => {
             </Button>
           </Space>
         </Card>
+        <Button type="primary" onClick={showModal}>
+          <PlusOutlined />
+          New Color
+        </Button>
+
+        <Modal
+          title="Create New Color"
+          open={isModalOpen}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          footer={null}
+        >
+          <RegisterColor />
+        </Modal>
       </Flex>
 
       <Divider />
