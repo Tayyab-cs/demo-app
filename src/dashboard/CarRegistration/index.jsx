@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Button, Flex, Table, Typography } from "antd";
-import { AddUser } from "./AddUser.jsx";
-import { CarModal } from "./CarModal.jsx";
+import AddUser from "./components/AddUser";
+import CarModal from "./components/CarModal.jsx";
+import columns from "./columns.js";
 
 const { Title } = Typography;
 
-export const UserDetails = () => {
+export const CarRegistration = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [carModalOpen, setCarModalOpen] = useState(false);
   const [viewData, setViewData] = useState({});
@@ -19,56 +20,6 @@ export const UserDetails = () => {
     setDataSource(updatedDataSource);
   };
 
-  // Table Columns
-  const columns = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-      align: "center",
-    },
-    {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-      align: "center",
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-      align: "center",
-    },
-    {
-      title: "Car Info",
-      dataIndex: "car_info",
-      key: "car_info",
-      align: "center",
-      render: (text, record) => (
-        <Button
-          type="link"
-          onClick={() => {
-            setCarModalOpen(true);
-            setViewData(record);
-          }}
-        >
-          View Data
-        </Button>
-      ),
-    },
-    {
-      title: "Action",
-      dataIndex: "action",
-      key: "action",
-      align: "center",
-      render: (text, record) => (
-        <Button type="link" danger onClick={() => deleteUser(record)}>
-          Delete User
-        </Button>
-      ),
-    },
-  ];
-
   return (
     <div style={{ margin: "30px" }}>
       <Flex justify="space-between" align="center">
@@ -81,7 +32,11 @@ export const UserDetails = () => {
           Add New User
         </Button>
       </Flex>
-      <Table dataSource={dataSource} columns={columns} bordered />
+      <Table
+        dataSource={dataSource}
+        columns={columns({ setCarModalOpen, setViewData, deleteUser })}
+        bordered
+      />
       {isModalOpen && (
         <AddUser
           isModalOpen={isModalOpen}

@@ -1,12 +1,12 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
-  DashboardLayout,
   Welcome,
-  ColorButtons,
-  UserDetails,
+  Colors,
+  CarRegistration,
   NotificationScreen,
 } from "../dashboard";
+import DashboardLayout from "../dashboard/Layout/index.jsx";
 import NotFound from "../components/NotFound.jsx";
 
 export default function RouterConfig() {
@@ -15,8 +15,8 @@ export default function RouterConfig() {
       <Routes>
         <Route path="/" element={<DashboardLayout />}>
           <Route path="/" element={<Welcome />} />
-          <Route path="/color" element={<ColorButtons />} />
-          <Route path="/user-details" element={<UserDetails />} />
+          <Route path="/color" element={<Colors />} />
+          <Route path="/car-registration" element={<CarRegistration />} />
           <Route path="/notifications" element={<NotificationScreen />} />
         </Route>
         <Route path="*" element={<NotFound />} />

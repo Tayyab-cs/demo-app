@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Alert, Button, Form, Input } from "antd";
 import validateColor from "validate-color";
-import { setColorsList } from "../../store/slices/colorSlice.js";
-import axiosInstance from "../../api/AxiosConfig.js";
+import { setColorsList } from "../../../../store/slices/colorSlice.js";
+import axiosInstance from "../../../../api/AxiosConfig.js";
 
-export const RegisterColor = () => {
+const RegisterColor = () => {
   const [form] = Form.useForm();
   const [alert, setAlert] = useState(null);
   const colorsList = useSelector((state) => state.colors.colorsList);
@@ -121,3 +121,5 @@ export const RegisterColor = () => {
     </>
   );
 };
+
+export default RegisterColor;

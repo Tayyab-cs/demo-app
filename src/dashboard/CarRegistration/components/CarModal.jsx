@@ -1,8 +1,8 @@
 import React from "react";
 import { Card, Modal } from "antd";
 
-export const CarModal = ({ carModalOpen, setCarModalOpen, viewData }) => {
-  const carsData = viewData.carDetail.items;
+const CarModal = ({ carModalOpen, setCarModalOpen, viewData }) => {
+  const { items: carsData } = viewData.carDetail;
 
   return (
     <Modal
@@ -11,24 +11,24 @@ export const CarModal = ({ carModalOpen, setCarModalOpen, viewData }) => {
       onCancel={() => setCarModalOpen(false)}
       footer={null}
     >
-      {carsData.map((car, index) => {
-        return (
-          <Card
-            title={car.name}
-            key={car.name + index}
-            bordered={false}
-            style={{
-              width: 300,
-              margin: "10px",
-              backgroundColor: "mintcream",
-            }}
-          >
-            <p>{car.model}</p>
-            <p>{car.color}</p>
-            <p>{car.price}</p>
-          </Card>
-        );
-      })}
+      {carsData.map((car, index) => (
+        <Card
+          title={car.name}
+          key={car.name + index}
+          bordered={false}
+          style={{
+            width: 300,
+            margin: "10px",
+            backgroundColor: "mintcream",
+          }}
+        >
+          <p>{car.model}</p>
+          <p>{car.color}</p>
+          <p>{car.price}</p>
+        </Card>
+      ))}
     </Modal>
   );
 };
+
+export default CarModal;

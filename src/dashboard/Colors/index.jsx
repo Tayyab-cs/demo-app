@@ -1,9 +1,9 @@
 import React from "react";
 import { Space, Row, Col } from "antd";
-import { ColorChanger } from "./ColorChanger.jsx";
-import { ColorBox } from "./ColorBox.jsx";
+import ColorChanger from "./components/colorChanger";
+import ColorBox from "./components/colorBox";
 
-export const ColorButtons = () => {
+export const Colors = () => {
   return (
     <div>
       <Row gap="small">

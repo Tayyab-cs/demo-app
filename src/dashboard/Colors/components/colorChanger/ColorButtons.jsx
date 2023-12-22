@@ -1,27 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Card,
-  Col,
-  Divider,
-  Flex,
-  Modal,
-  Row,
-  Space,
-  Typography,
-  message,
-} from "antd";
+import { Button, Col, Flex, Row, message } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
 import {
   setActiveColor,
   setColorsList,
   setCount,
-} from "../../store/slices/colorSlice.js";
-import "./Colors.css";
-import { RegisterColor } from "./RegisterColor.jsx";
-
-const { Title } = Typography;
+} from "../../../../store/slices/colorSlice.js";
+import "../../index.css";
 
 const DEFAULT_SELECTED_COLOR = {
   _id: "noId",
@@ -30,8 +16,7 @@ const DEFAULT_SELECTED_COLOR = {
   isDelete: false,
 };
 
-export const ColorChanger = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const ColorButtons = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
   const activeColor = useSelector((state) => state.colors.activeColor);
@@ -64,74 +49,9 @@ export const ColorChanger = () => {
       openMessage("error", "You are not allowed to perform this action 😢");
     }
   };
-
-  const countLength = () => {
-    const colorsList = colors;
-    if (colorsList && Array.isArray(colorsList)) {
-      const listLength = colorsList.filter((color) => !color.isDelete).length;
-      return count === listLength;
-    }
-    return false;
-  };
-
-  // Modal Methods
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
   return (
-    <div style={{ padding: "5px" }}>
+    <>
       {contextHolder}
-      {/***** CARD *****/}
-      <Flex justify="space-between">
-        <Card className="card-container" title="Counter" bordered={false}>
-          <Space>
-            <Button
-              className="decrement-btn"
-              disabled={count === 0}
-              onClick={() => {
-                dispatch(setCount(count - 1));
-              }}
-            >
-              -
-            </Button>
-            <Title className="card-title">{count}</Title>
-            <Button
-              className="increment-btn"
-              disabled={countLength()}
-              onClick={() => {
-                dispatch(setCount(count + 1));
-              }}
-            >
-              +
-            </Button>
-          </Space>
-        </Card>
-        <Button type="primary" onClick={showModal}>
-          <PlusOutlined />
-          New Color
-        </Button>
-
-        <Modal
-          title="Create New Color"
-          open={isModalOpen}
-          onOk={handleOk}
-          onCancel={handleCancel}
-          footer={null}
-        >
-          <RegisterColor />
-        </Modal>
-      </Flex>
-
-      <Divider />
-
-      {/***** BUTTONS *****/}
       <Flex className="flex-btns" align="center" justify="center">
         <Row>
           {colors &&
@@ -186,6 +106,8 @@ export const ColorChanger = () => {
               ))}
         </Row>
       </Flex>
-    </div>
+    </>
   );
 };
+
+export default ColorButtons;
