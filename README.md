@@ -39,4 +39,35 @@ This is a React-based web application that features a Color Changer, Color Box, 
 
 ## Getting Started
 
-1. Clone the repository.
+### Prerequisites
+
+Make sure you have the following installed on your system:
+
+- Node.js: Make sure to install the LTS version.
+- Git: Version control system for cloning the repository.
+
+### Clone the repository
+
+Open your terminal and run the following command to clone the repository to your local machine:
+
+`git clone <repository_url>`
+
+### Navigate to Project Directory
+
+Move into the project directory using the following command:
+
+### Install Dependencies
+
+Install project dependencies using npm (Node Package Manager). Run the following command:
+
+`npm install`
+
+### Start the Development Server
+
+Start the development server to run the application locally. Execute the following command:
+
+`npm start`
+
+This will start the development server, and you should be able to access the application in your web browser at `http://localhost:3000`.
+
+Happy Coding!🫡
