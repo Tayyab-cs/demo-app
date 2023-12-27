@@ -1,17 +1,17 @@
 import React from "react";
 import { Card, Modal } from "antd";
 
-const CarModal = ({ carModalOpen, setCarModalOpen, viewData }) => {
-  const { items: carsData } = viewData.carDetail;
+const CarModal = ({ showModal, resetAction, carData }) => {
+  const items = carData ? carData.carDetail.items : [];
 
   return (
     <Modal
       title="Add User"
-      open={carModalOpen}
-      onCancel={() => setCarModalOpen(false)}
+      open={showModal}
+      onCancel={resetAction}
       footer={null}
     >
-      {carsData.map((car, index) => (
+      {items.map((car, index) => (
         <Card
           title={car.name}
           key={car.name + index}

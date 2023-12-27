@@ -3,7 +3,7 @@ import { Space, Row, Col } from "antd";
 import ColorChanger from "./components/colorChanger";
 import ColorBox from "./components/colorBox";
 
-export const Colors = () => {
+const Colors = () => {
   return (
     <div>
       <Row gap="small">
@@ -18,3 +18,5 @@ export const Colors = () => {
     </div>
   );
 };
+
+export default Colors;

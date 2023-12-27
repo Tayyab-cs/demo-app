@@ -1,7 +1,21 @@
+import { useState } from "react";
 import { Button } from "antd";
 
-const columns = ({ setCarModalOpen, setCarData, deleteUser }) => {
-  return [
+const useCarData = (dataSource, setDataSource) => {
+  const [action, setAction] = useState({
+    carData: undefined,
+    actionType: undefined,
+  });
+
+  // Delete User
+  const deleteUser = (record) => {
+    const updatedDataSource = dataSource.filter(
+      (item) => item.id !== record.id
+    );
+    setDataSource(updatedDataSource);
+  };
+
+  const columns = [
     {
       title: "ID",
       dataIndex: "id",
@@ -28,10 +42,7 @@ const columns = ({ setCarModalOpen, setCarData, deleteUser }) => {
       render: (text, record) => (
         <Button
           type="link"
-          onClick={() => {
-            setCarModalOpen(true);
-            setCarData(record);
-          }}
+          onClick={() => setAction({ carData: record, actionType: "CAR_INFO" })}
         >
           View Data
         </Button>
@@ -49,6 +60,8 @@ const columns = ({ setCarModalOpen, setCarData, deleteUser }) => {
       ),
     },
   ];
+
+  return [columns, action, setAction];
 };
 
-export default columns;
+export default useCarData;

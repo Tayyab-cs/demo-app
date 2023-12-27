@@ -2,22 +2,17 @@ import React, { useState } from "react";
 import { Button, Flex, Table, Typography } from "antd";
 import AddUser from "./components/AddUser";
 import CarModal from "./components/CarModal.jsx";
-import columns from "./columns.js";
+import useCarData from "../../hooks/customHooks.js";
 
 const { Title } = Typography;
 
-export const CarRegistration = () => {
+const CarRegistration = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [carModalOpen, setCarModalOpen] = useState(false);
-  const [viewData, setViewData] = useState({});
   const [dataSource, setDataSource] = useState([]);
+  const [columns, action, setAction] = useCarData(dataSource, setDataSource);
 
-  // Delete User
-  const deleteUser = (record) => {
-    const updatedDataSource = dataSource.filter(
-      (item) => item.id !== record.id
-    );
-    setDataSource(updatedDataSource);
+  const resetAction = () => {
+    setAction({ actionType: null, carData: null });
   };
 
   return (
@@ -32,11 +27,7 @@ export const CarRegistration = () => {
           Add New User
         </Button>
       </Flex>
-      <Table
-        dataSource={dataSource}
-        columns={columns({ setCarModalOpen, setViewData, deleteUser })}
-        bordered
-      />
+      <Table dataSource={dataSource} columns={columns} bordered />
       {isModalOpen && (
         <AddUser
           isModalOpen={isModalOpen}
@@ -45,13 +36,14 @@ export const CarRegistration = () => {
           setDataSource={setDataSource}
         />
       )}
-      {carModalOpen && (
-        <CarModal
-          carModalOpen={carModalOpen}
-          setCarModalOpen={setCarModalOpen}
-          viewData={viewData}
-        />
-      )}
+
+      <CarModal
+        showModal={action.actionType === "CAR_INFO"}
+        resetAction={resetAction}
+        carData={action.carData}
+      />
     </div>
   );
 };
+
+export default CarRegistration;

@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 
 const { Title } = Typography;
 
-export const Welcome = () => {
+const Welcome = () => {
   return (
     <Flex justify="center" align="center" vertical>
       <Title level={1}>WELCOME TO APPFORPRACTICE</Title>
@@ -18,3 +18,5 @@ export const Welcome = () => {
     </Flex>
   );
 };
+
+export default Welcome;
